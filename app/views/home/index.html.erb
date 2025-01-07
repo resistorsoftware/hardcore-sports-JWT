@@ -1,0 +1,44 @@
+<div>
+  <%= polaris_page do |page| %>
+    <%= polaris_layout do |layout| %>
+      <% layout.with_section do %>
+        <%= polaris_card do |card| %>
+          <%= polaris_horizontal_grid(columns: 2) do %>
+            <div style="width:320px;height:320px;border-radius:15px;overflow:hidden;">
+              <%= image_tag "logo.png", size: "320" %>
+            </div>
+            <%= polaris_text_container do %>
+              <%= polaris_heading { "Manage orders between Shopify and Monday" } %>
+              <%= polaris_list do |list| %>
+                <% list.with_item do
+                  "Paid Shopify orders are processed and sent to Monday for Equipe
+                                                  production"
+                end %>
+                <% list.with_item do
+                  "The Cut Sheet link in Monday is sent back to this App, which
+                                                  then displays the Cut Sheet"
+                end %>
+                <% list.with_item do
+                  "The Design column contains the SKUs from the order, as a large
+                                                  text field in Monday"
+                end %>
+                <% list.with_item do
+                  "If an order is missed, there is a re-send option in the More
+                                                  Actions link in the order details"
+                end %>
+                <% list.with_item do
+                  "The product tag vendor:equipe is the key to move a product to
+                                                  Monday for production"
+                end %>
+              <% end %>
+            <% end %>
+          <% end %>
+        <% end %>
+        <%= polaris_card do %>
+          <p>Started: February 2024, by Resistor Software, in conjunction with
+            Equipe</p>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>

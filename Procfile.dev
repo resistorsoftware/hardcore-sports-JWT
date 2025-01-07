@@ -1,0 +1,3 @@
+web: bin/rails s
+js: yarn build --watch
+tunnel: ngrok http --subdomain=hxcs-monday 3208

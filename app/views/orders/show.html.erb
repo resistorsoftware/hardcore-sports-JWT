@@ -1,0 +1,214 @@
+
+<style>
+
+@media print {
+  @page {
+    margin: 0.5in; /* set margin on each page */
+    size: 11in 8.5in; /* set page size */
+  }  
+
+  #items tr:nth-child(even) {
+    break-after: auto;
+    break-before: avoid;
+  }
+  #items tr:nth-child(odd) {
+    background-color: #ededed;
+    font-weight: bold;
+  }
+
+  #items tr:nth-child(7) {
+    break-before: always;
+  }
+
+  #items tr:nth-child(15) {
+    break-before: always;
+  }
+
+  #items tr:nth-child(23) {
+    break-before: always;
+  }
+
+  @page wide {
+    size: a4 landscape;
+  }
+  body {
+    font-size: 12pt;
+    line-height: 1.2; 
+  }
+
+  /*** added November 2024 to allow for three attributes in a single cell ***/
+  .attribute-container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px; 
+  } 
+
+  .attribute-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background-color: #ededed;
+  }
+
+  .attribute-subcell {
+    padding: 1px 0px 1px 5px;
+  }
+
+  .image-cell {
+    padding: 10px; /* Add padding as needed */
+  }
+
+  .image-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Creates two equal-width columns */
+    gap: 10px; /* Adds space between the images */
+  }
+
+  .image-container img {
+    width: auto;
+    height: 150px;
+  }
+
+}
+
+  /*** added November 2024 to allow for three attributes in a single cell ***/
+  .attribute-container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px; 
+  } 
+
+  .attribute-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background-color: #ededed;
+  }
+
+  .attribute-subcell {
+    padding: 1px 0px 1px 5px;
+  }
+
+  .image-cell {
+    padding: 2px; /* Add padding as needed */
+  }
+
+  .image-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Creates two equal-width columns */
+    gap: 2px; /* Adds space between the images */
+  }
+
+  .image-container img {
+    width: auto;
+    height: 150px;
+  }
+
+
+</style>
+
+<div class="page: wide;" style="width: 100%">
+  <table cellpadding="10" cellspacing="0" border="0" style="width: 100%">
+    <tbody>
+      <tr>
+        <td><%= image_tag 'logo.png', size: "100x100" %></td>
+        <td>
+          <p>Customer Shipping Info</p>
+          <p><%= @order.shipping_address.first_name %> <%= @order.shipping_address.last_name %><br/>
+          <%= @order.shipping_address.address1 %> <%= @order.shipping_address.address2 %><br/>
+          <%= @order.shipping_address.city %>, <%= @order.shipping_address.province_code %>, <%= @order.shipping_address.zip %><br/>
+          <%= @order.shipping_address.country_code_v2 %></p>
+        </td>
+        <td>
+          <p>Order: <%= @order.name %></p>
+          <p>Date: <%= DateTime.parse(@order.created_at).strftime("%e-%b-%Y") %></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <table cellpadding="10" cellspacing="0" border="1" style="width: 100%">
+    <tbody id="items">
+      <!-- there will be one or more entries in v. one per variant selected per product. each gets a cell -->
+      <% if @items.empty? %>
+        <tr>
+          <td colspan="100%">
+            <div style="text-align: center;">
+              <h2>No Items sold as Vendor:Equipe tag</h2>
+            </div>
+          </td> 
+        </tr>      
+      <% end %>
+      <% @items.each do |k, v| %> 
+        <tr style="background-color: #cccccc;">
+          <td>Image</td>
+          <td>Design</td>
+          <td>Attributes</td>
+          <% v.first.product.options.each do |options| %>
+            <% if options.name.downcase == "size" %>
+              <% options.values.each do |size| %>
+                <td cellpadding="2">
+                  <div style="text-align: center;">
+                    <%= size %>
+                  </div>
+                </td>
+              <% end %>
+              <% if options&.values&.count < @max_bins %>
+                <% (@max_bins - options.values.count).times do %>
+                  <td>&nbsp;</td>
+                <% end %>
+              <% end %>
+            <% end %>
+          <% end %>
+          <td>
+            <div style="text-align: center;">
+              Total
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="image-cell">
+            <div class="image-container">
+              <img src="<%= v.first.product.images.first.url %>" />
+              <img src="<%= v.first.product.images.last.url %>" />
+            </div>
+          </td>
+          <td><%= @products[k]["title"] %></td>
+          <td>
+            <div class="attribute-container">
+              <div class="attribute-cell">
+                <div class="attribute-subcell">Thread color:</div>
+                <div class="attribute-subcell" style="text-align: center;"><%= @products[k]["thread"] %></div>
+              </div>
+              <div class="attribute-cell">
+                <div class="attribute-subcell">Lining:</div>
+                <div class="attribute-subcell" style="text-align: center;"><%= @products[k]["lining"] %></div>
+              </div>
+              <div class="attribute-cell">
+                <div class="attribute-subcell">Packaging:</div>
+                <div class="attribute-subcell" style="text-align: center;"><%= @products[k]["packaging"] %></div>
+              </div>
+            </div>
+          </td>
+          <% v.first.product.options.each do |options| %>
+            <% if options.name.downcase == "size" %>
+              <% options.values.each do |size| %>
+                <td cellpadding="2">
+                  <div style="text-align: center;">
+                    <%= @products[k]["size_bins"][size] > 0 ? @products[k]["size_bins"][size] : "" %>
+                  </div>
+                </td>
+              <% end %>
+              <% if options&.values&.count < @max_bins %>
+                <% (@max_bins - options.values.count).times do %>
+                  <td>&nbsp;</td>
+                <% end %>
+              <% end %>
+            <% end %>
+          <% end %>
+          <td><%= @products[k]["size_bins"].inject(0) { |res, el| res += el.last } %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+

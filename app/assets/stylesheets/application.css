@@ -1,0 +1,16 @@
+/*
+ *= require polaris_view_components
+ */
+
+/* We use loading indicator from App Bridge instead */
+.turbo-progress-bar {
+  visibility: hidden;
+}
+
+main {
+  padding-bottom: 40px;
+}
+
+.modal-wrapper {
+  padding: var(--p-space-400);
+}

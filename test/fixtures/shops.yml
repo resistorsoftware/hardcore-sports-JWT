@@ -1,0 +1,4 @@
+regular:
+  shopify_domain: <%= ENV['TEST_STORE_DOMAIN'] %>
+  shopify_token: <%= ENV['TEST_STORE_TOKEN'] %>
+  subscription_active: true
