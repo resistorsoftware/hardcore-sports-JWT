@@ -11,8 +11,8 @@ ShopifyApp.configure do |config|
   config.reauth_on_access_scope_changes = true
   config.new_embedded_auth_strategy = false
 
-  config.api_key = ENV.fetch('SHOPIFY_API_KEY', '').presence
-  config.secret = ENV.fetch('SHOPIFY_API_SECRET', '').presence
+  config.api_key = ENV.fetch("SHOPIFY_API_KEY", "").presence
+  config.secret = ENV.fetch("SHOPIFY_API_SECRET", "").presence
 
   # You may want to charge merchants for using your app. Setting the billing configuration will cause the Authenticated
   # controller concern to check that the session is for a merchant that has an active one-time payment or subscription.
@@ -32,10 +32,13 @@ ShopifyApp.configure do |config|
   # )
 
   if defined? Rails::Server
-    raise('Missing SHOPIFY_API_KEY. See https://github.com/Shopify/shopify_app#requirements') unless config.api_key
-    raise('Missing SHOPIFY_API_SECRET. See https://github.com/Shopify/shopify_app#requirements') unless config.secret
+    raise("Missing SHOPIFY_API_KEY. See https://github.com/Shopify/shopify_app#requirements") unless config.api_key
+    raise("Missing SHOPIFY_API_SECRET. See https://github.com/Shopify/shopify_app#requirements") unless config.secret
   end
-  
+  config.webhooks = [
+    {topic: "app/uninstalled", address: "webhooks/app_uninstalled"},
+    {topic: "orders/paid", address: "webhooks/orders_paid"}
+  ]
 end
 
 Rails.application.config.after_initialize do
@@ -51,7 +54,7 @@ Rails.application.config.after_initialize do
       logger: Rails.logger,
       log_level: :info,
       private_shop: ENV.fetch("SHOPIFY_APP_PRIVATE_SHOP", nil),
-      user_agent_prefix: "ShopifyApp/#{ShopifyApp::VERSION}",
+      user_agent_prefix: "ShopifyApp/#{ShopifyApp::VERSION}"
     )
 
     ShopifyApp::WebhooksManager.add_registrations
