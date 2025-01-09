@@ -2,7 +2,7 @@ class OrderController < AuthenticatedController
   def index
     Rails.logger.info("Got a command to send a Shopify order to monday as if hit by a webhook, #{params}")
     hxcs_board_id = ""
-    board_name = Rails.env.development? ? "Resistor Dev" : "HAVRDCORESPORT"
+    board_name = Rails.env.development? ? "Resistor Dev" : "HARDCORESPORT"
     shop_url = Rails.env.development? ? "hxcs-monday.ngrok.io" : "hxc-monday-21440f1fb993.herokuapp.com"
     current_shop.with_shopify_session do |session|
       if current_shop.orders.find_by(order_id: params[:id]).nil?
