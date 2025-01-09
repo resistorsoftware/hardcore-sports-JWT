@@ -1,4 +1,3 @@
-
 class OrdersPaidJob < ActiveJob::Base
   extend ShopifyAPI::Webhooks::Handler
   attr_reader :shop
@@ -25,6 +24,7 @@ class OrdersPaidJob < ActiveJob::Base
       default_location = GetDefaultLocation.call.data
       monday = false
       total_items = 0
+      @sku_list = []
       webhook["line_items"].each do |item|
         next if !item["variant_id"] && !item["product_id"]
 
@@ -32,7 +32,7 @@ class OrdersPaidJob < ActiveJob::Base
         variant = GetProductVariant.call(id: "gid://shopify/ProductVariant/#{item["variant_id"]}", location_id: default_location.id).data
         # August 3rd, 2023
         # Deal with either the variant image, or the product featured image as a file to the create item call
-        image = if variant.variant_image
+        if variant.variant_image
           variant.variant_image
         elsif variant.featured_image
           variant.featured_image
@@ -42,6 +42,7 @@ class OrdersPaidJob < ActiveJob::Base
         if variant.tags.find { |x| x.downcase == "vendor:equipe" }
           logger.info("HXCS item sold for Monday #{variant.title}")
           total_items += item["quantity"].to_i
+          @sku_list << item.sku
           hxcs_board_id = GetMondayBoard.call(name: "HARDCORESPORT").to_i
           logger.info("HXCS board id: #{hxcs_board_id}")
           monday = true
@@ -51,9 +52,23 @@ class OrdersPaidJob < ActiveJob::Base
         logger.error "Line Item processing issue: #{item.inspect}, #{e.message}"
       end
       if monday
-        url_code = create_monday_code(order_id: webhook["id"])
-        url = "https://hxc-monday-21440f1fb993.herokuapp.com/orders?id=#{webhook["id"]}&code=#{url_code}"
-        CreateMondayItem.call(board_id: hxcs_board_id, group_id: "topics", item_name: webhook["name"], column_values: {total_units: total_items, link: {url: url, text: "Cut Sheet"}})
+        url_code = create_monday_code(order_id: params[:id])
+        url = "https://#{shop_url}/orders?id=#{params[:id]}&code=#{url_code}"
+        # December 2024, add a hoverable item to the design column that would show off all the SKUs in an order
+        # the design column is accessed via the "team" ID
+        column_values = {
+          team: @sku_list.join(", "),
+          total_units: @total_items,
+          link: {
+            url: url,
+            text: "Cut Sheet",
+            url_text: "cut sheet"
+          }
+        }
+        CreateMondayItem.call(board_id: hxcs_board_id, group_id: "topics", item_name: @order.name, column_values: column_values)
+        # url_code = create_monday_code(order_id: webhook["id"])
+        # url = "https://hxc-monday-21440f1fb993.herokuapp.com/orders?id=#{webhook["id"]}&code=#{url_code}"
+        # CreateMondayItem.call(board_id: hxcs_board_id, group_id: "topics", item_name: webhook["name"], column_values: {total_units: total_items, link: {url: url, text: "Cut Sheet"}})
         logger.info("Monday Order #{webhook["name"]}, #{webhook["id"]} for #{shop_domain}, url_code: #{url_code}")
       else
         logger.info("Not a Monday order: #{webhook["name"]} for #{shop_domain}, no vendor:equipe tagged products")
