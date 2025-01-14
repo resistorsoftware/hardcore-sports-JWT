@@ -127,7 +127,7 @@ class GetOrderForMonday
     Rails.logger.info("Calling GQL for order")
     response = execute(INITIAL_QUERY, id: id, cursor: nil)
     order = response.data.order
-    Rails.logger.info("Initial aspect of order: #{order}")
+    Rails.logger.info("Initial aspect of order: #{response.inspect}")
     if order.nil?
       response.data = order
     else
