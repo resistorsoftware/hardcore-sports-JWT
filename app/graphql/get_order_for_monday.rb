@@ -124,6 +124,7 @@ class GetOrderForMonday
   GRAPHQL
 
   def call(id:)
+    Rails.logger.info("Calling GQL for order")
     response = execute(INITIAL_QUERY, id: id, cursor: nil)
     order = response.data.order
     Rails.logger.info("Initial aspect of order: #{order}")
