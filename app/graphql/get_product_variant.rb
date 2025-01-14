@@ -1,4 +1,3 @@
-
 class GetProductVariant
   include ShopifyGraphql::Query
   Variant = Struct.new(:id, :legacy_resource_id, :inventory_level_id, :display_name, :variant_image, :product_id, :tags, :featured_image, :title)
@@ -21,8 +20,12 @@ class GetProductVariant
           id
           title
           tags
-          featuredImage {
-            url
+          featuredMedia {
+            preview {
+              image {
+                url
+              }
+            }
           }
         }
       }
@@ -45,7 +48,7 @@ class GetProductVariant
       product_id: data.product.id,
       tags: data.product.tags,
       title: data.product.title,
-      featured_image: data.product.featuredImage&.url
+      featured_image: data.product.featuredMedia&.preview&.image&.url
     )
   end
 end
