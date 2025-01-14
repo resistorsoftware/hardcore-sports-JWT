@@ -42,7 +42,7 @@ class OrdersPaidJob < ActiveJob::Base
         if variant.tags.find { |x| x.downcase == "vendor:equipe" }
           logger.info("HXCS item sold for Monday #{variant.title}")
           total_items += item["quantity"].to_i
-          @sku_list << item.sku
+          @sku_list << item["sku"]
           hxcs_board_id = GetMondayBoard.call(name: "HARDCORESPORT").to_i
           logger.info("HXCS board id: #{hxcs_board_id}")
           monday = true
