@@ -199,10 +199,9 @@ class GetOrderForMonday
               tags: edge.node&.product&.tags,
               lining: edge.node&.product&.tags&.find { |tag| /lining/ =~ tag }&.split(":")&.last,
               thread_color: edge.node&.product&.tags&.find { |tag| /threadcolor/ =~ tag }&.split(":")&.last,
+              binding_color: edge.node&.product&.tags&.find { |tag| /bindingcolor/ =~ tag }&.split(":")&.last,
+              ear_guard_color: edge.node&.product&.tags&.find { |tag| /earguardcolor/ =~ tag }&.split(":")&.last,
               packaging: edge.node&.product&.tags&.find { |tag| /packaging/ =~ tag }&.split(":")&.last,
-              featured_image: OpenStruct.new(
-                url: edge.node&.product&.featuredImage&.url
-              ),
               images: edge.node&.product&.media&.edges&.map do |image|
                 OpenStruct.new(
                   url: image&.node&.preview&.image&.url
@@ -215,3 +214,6 @@ class GetOrderForMonday
     )
   end
 end
+# added two more tags January 14, 2025
+# bindingcolor:
+# earguardcolor:

@@ -31,6 +31,8 @@ class OrdersController < ApplicationController
             end
             @products[item.product.id]["thread"] = item.product.thread_color
             @products[item.product.id]["lining"] = item.product.lining
+            @products[item.product.id]["binding"] = item.product.binding_color
+            @products[item.product.id]["earguard"] = item.product.ear_guard_color
             @products[item.product.id]["title"] = item.product.title
             @products[item.product.id]["size_bins"][size.to_s] += quantity
             # @items[item.product.id][size] = quantity

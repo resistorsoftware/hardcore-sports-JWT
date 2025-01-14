@@ -1,4 +1,3 @@
-
 <style>
 
 @media print {
@@ -103,42 +102,47 @@
     width: auto;
     height: 150px;
   }
-
-
 </style>
 
 <div class="page: wide;" style="width: 100%">
   <table cellpadding="10" cellspacing="0" border="0" style="width: 100%">
     <tbody>
       <tr>
-        <td><%= image_tag 'logo.png', size: "100x100" %></td>
+        <td><%= image_tag "logo.png", size: "100x100" %></td>
         <td>
           <p>Customer Shipping Info</p>
-          <p><%= @order.shipping_address.first_name %> <%= @order.shipping_address.last_name %><br/>
-          <%= @order.shipping_address.address1 %> <%= @order.shipping_address.address2 %><br/>
-          <%= @order.shipping_address.city %>, <%= @order.shipping_address.province_code %>, <%= @order.shipping_address.zip %><br/>
-          <%= @order.shipping_address.country_code_v2 %></p>
+          <p><%= @order.shipping_address.first_name %>
+            <%= @order.shipping_address.last_name %><br/>
+            <%= @order.shipping_address.address1 %>
+            <%= @order.shipping_address.address2 %><br/>
+            <%= @order.shipping_address.city %>,
+            <%= @order.shipping_address.province_code %>,
+            <%= @order.shipping_address.zip %><br/>
+            <%= @order.shipping_address.country_code_v2 %></p>
         </td>
         <td>
-          <p>Order: <%= @order.name %></p>
-          <p>Date: <%= DateTime.parse(@order.created_at).strftime("%e-%b-%Y") %></p>
+          <p>Order:
+            <%= @order.name %></p>
+          <p>Date:
+            <%= DateTime.parse(@order.created_at).strftime("%e-%b-%Y") %></p>
         </td>
       </tr>
     </tbody>
   </table>
   <table cellpadding="10" cellspacing="0" border="1" style="width: 100%">
     <tbody id="items">
-      <!-- there will be one or more entries in v. one per variant selected per product. each gets a cell -->
+      <!-- there will be one or more entries in v. one per variant selected per
+      product. each gets a cell -->
       <% if @items.empty? %>
         <tr>
           <td colspan="100%">
             <div style="text-align: center;">
               <h2>No Items sold as Vendor:Equipe tag</h2>
             </div>
-          </td> 
-        </tr>      
+          </td>
+        </tr>
       <% end %>
-      <% @items.each do |k, v| %> 
+      <% @items.each do |k, v| %>
         <tr style="background-color: #cccccc;">
           <td>Image</td>
           <td>Design</td>
@@ -168,8 +172,8 @@
         <tr>
           <td class="image-cell">
             <div class="image-container">
-              <img src="<%= v.first.product.images.first.url %>" />
-              <img src="<%= v.first.product.images.last.url %>" />
+              <img src="<%= v.first.product.images.first.url %>"/>
+              <img src="<%= v.first.product.images.last.url %>"/>
             </div>
           </td>
           <td><%= @products[k]["title"] %></td>
@@ -186,6 +190,14 @@
               <div class="attribute-cell">
                 <div class="attribute-subcell">Packaging:</div>
                 <div class="attribute-subcell" style="text-align: center;"><%= @products[k]["packaging"] %></div>
+              </div>
+              <div class="attribute-cell">
+                <div class="attribute-subcell">Binding color:</div>
+                <div class="attribute-subcell" style="text-align: center;"><%= @products[k]["binding"] %></div>
+              </div>
+              <div class="attribute-cell">
+                <div class="attribute-subcell">Ear Guard Color:</div>
+                <div class="attribute-subcell" style="text-align: center;"><%= @products[k]["earguard"] %></div>
               </div>
             </div>
           </td>
@@ -211,4 +223,3 @@
     </tbody>
   </table>
 </div>
-
