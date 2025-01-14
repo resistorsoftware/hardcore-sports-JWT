@@ -126,6 +126,7 @@ class GetOrderForMonday
   def call(id:)
     response = execute(INITIAL_QUERY, id: id, cursor: nil)
     order = response.data.order
+    Rails.logger.info("Initial aspect of order: #{order}")
     if order.nil?
       response.data = order
     else

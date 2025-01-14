@@ -1,4 +1,3 @@
-
 class OrdersController < ApplicationController
   # Build in our own security for calls coming from Monday
   include ShopifyApp::Orders
@@ -7,8 +6,8 @@ class OrdersController < ApplicationController
     logger.info("incoming request to show off an order #{order_params}")
     @original_data = JSON.parse(decode_monday_code(order_id: order_params["id"], code: order_params["code"]))
     logger.info("Original Data: #{@original_data}, #{@original_data.class}")
-    if ["hotwire-resistor.myshopify.com","hardcoresport.myshopify.com"].include?(@original_data["shop"])
-    
+    if ["hotwire-resistor.myshopify.com", "hardcoresport.myshopify.com"].include?(@original_data["shop"])
+
       # Dish out the order
       shop = Shop.find_by(shopify_domain: @original_data["shop"])
       raise "Could not find shop in DB" if shop.nil?
