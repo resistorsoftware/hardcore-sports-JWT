@@ -1,10 +1,11 @@
 class OrdersPaidJob < ActiveJob::Base
-  extend ShopifyAPI::Webhooks::Handler
+  # extend ShopifyAPI::Webhooks::Handler
+  extend ShopifyAPI::Webhooks::WebhookHandler
   attr_reader :shop
 
   class << self
-    def handle(topic:, shop:, body:)
-      perform_later(topic:, shop_domain: shop, webhook: body)
+    def handle(data:)
+      perform_later(topic: data.topic, shop_domain: data.shop, webhook: data.body)
     end
   end
 

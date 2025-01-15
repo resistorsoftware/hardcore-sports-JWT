@@ -17,6 +17,8 @@ class OrdersController < ApplicationController
       @sizes = Hash.new { |h, k| h[k] = {} }
       shop.with_shopify_session do
         @order = GetOrderForMonday.call(id: "gid://shopify/Order/#{@original_data["order_id"]}").data
+        raise "Could not get Shopify Order Details: #{order_params["id"]}" if @order.nil?
+
         # go through the line items and build up the products for efficiency sake
         @order.line_items.each do |item|
           # only if the product was tagged as vendor:equipe should we have the product
@@ -46,7 +48,7 @@ class OrdersController < ApplicationController
     end
     render layout: false
   rescue => e
-    logger.error "Problem processing incoming order request: #{e.message}\n#{e.backtrace}"
+    logger.error "Problem processing incoming order request: #{e.message}"
     render "errors/old_order_error", status: :unprocessable_entity
   end
 
