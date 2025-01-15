@@ -50,6 +50,7 @@ class OrderController < AuthenticatedController
         end
       else
         Rails.logger.info("Order already exists: #{params[:id]}")
+        @order_id = params[:id]
       end
     end
   end

@@ -1,11 +1,15 @@
 <% if @order.nil? %>
-  <%= polaris_page do %>
+  <div data-controller="order" data-order-id="<%= @order_id %>">
+  <%= polaris_page(
+      title: "Re-send Order to Monday",
+      back_url: home_path,
+      secondary_actions: [url: "#",content: "return to order", "data-action": "click->order#return"]
+    ) do |page| %>
     <%= polaris_layout do |layout| %>
       <% layout.with_section do %>
         <%= polaris_card do %>
-          <p>It seems perhaps this order was already sent to Monday as we found
-            a record in the App DB for this exact order.</p>
-          <p>This behaviour can be changed as it might be perfectly find to send
+          <p>The selected order was already sent to Monday!</p>
+          <p>This behaviour can be changed as it might be fine to send
             more than one copy of the same order.</p>
           <p>Open for discussion!</p>
         <% end %>
