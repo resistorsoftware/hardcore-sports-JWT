@@ -1,0 +1,25 @@
+<div>
+  <%= polaris_page do |page| %>
+    <%= polaris_layout do |layout| %>
+      <% layout.with_section do %>
+        <%= polaris_card do |card| %>
+          <%= polaris_horizontal_grid(columns: 2) do %>
+            <div style="width:320px;height:320px;border-radius:15px;overflow:hidden;">
+              <%= image_tag "logo.png", size: "320" %>
+            </div>
+            <%= polaris_text_container do %>
+              <%= polaris_heading { "Attempt to access old Order" } %>
+              <p>Shopify only allows orders to be accessed that are 60 days or
+                newer</p>
+              <p>The order attempted to be viewed here was older than 60 days!</p>
+            <% end %>
+          <% end %>
+        <% end %>
+        <%= polaris_card do %>
+          <p>Started: February 2024, by Resistor Software, in conjunction with
+            Equipe</p>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>
