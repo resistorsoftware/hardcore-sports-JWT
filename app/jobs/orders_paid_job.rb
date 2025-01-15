@@ -10,6 +10,7 @@ class OrdersPaidJob < ActiveJob::Base
   end
 
   def perform(topic:, shop_domain:, webhook:)
+    shop_url = Rails.env.development? ? "hxcs-monday.ngrok.io" : "hxc-monday-21440f1fb993.herokuapp.com"
     @shop = Shop.find_by(shopify_domain: shop_domain)
     hxcs_board_id = ""
     raise "No Shop record found for #{shop_domain}..." if shop.nil?
