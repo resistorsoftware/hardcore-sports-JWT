@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="<%= polaris_html_classes %>" style="<%= polaris_html_styles %>">
   <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="turbo-cache-control" content="no-preview">
     <%= csrf_meta_tags %>
@@ -11,7 +11,7 @@
     <%= javascript_include_tag "application" %>
   </head>
 
-  <body>
+  <body style="<%= polaris_body_styles %>">
     <%= yield %>
   </body>
 </html>
