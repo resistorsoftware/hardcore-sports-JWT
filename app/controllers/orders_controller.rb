@@ -1,11 +1,13 @@
+# frozen_string_literal: true
+
 class OrdersController < ApplicationController
   # Build in our own security for calls coming from Monday
   include ShopifyApp::Orders
 
   def show
-    logger.info("incoming request to show off an order #{order_params}")
+    # logger.info("incoming request to show off an order #{order_params}")
     @original_data = JSON.parse(decode_monday_code(order_id: order_params["id"], code: order_params["code"]))
-    logger.info("Original Data: #{@original_data}, #{@original_data.class}")
+    # logger.info("Original Data: #{@original_data}, #{@original_data.class}")
     if ["hotwire-resistor.myshopify.com", "hardcoresport.myshopify.com"].include?(@original_data["shop"])
 
       # Dish out the order
@@ -43,7 +45,7 @@ class OrdersController < ApplicationController
           end
         end
         @max_bins = max_bins(products: @products)
-        logger.info("Max Bins: #{@max_bins}, products: #{@products}")
+        # logger.info("Max Bins: #{@max_bins}, products: #{@products}")
       end
     end
     render layout: false

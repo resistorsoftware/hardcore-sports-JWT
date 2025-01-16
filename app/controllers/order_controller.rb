@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class OrderController < AuthenticatedController
   def index
-    Rails.logger.info("Got a command to send a Shopify order to monday as if hit by a webhook, #{params}")
+    # Rails.logger.info("Got a command to send a Shopify order to monday as if hit by a webhook, #{params}")
     hxcs_board_id = ""
     board_name = Rails.env.development? ? "Resistor Dev" : "HARDCORESPORT"
     shop_url = Rails.env.development? ? "hxcs-monday.ngrok.io" : "hxc-monday-21440f1fb993.herokuapp.com"
@@ -13,16 +15,16 @@ class OrderController < AuthenticatedController
         @sku_list = []
         @order.line_items.each do |item|
           if item.product.tags.find { |x| x.downcase == "vendor:equipe" }
-            Rails.logger.info("HXCS item sold for Monday #{item.product.title}")
+            # Rails.logger.info("HXCS item sold for Monday #{item.product.title}")
             @total_items += item.quantity.to_i
             @sku_list << item.sku
             hxcs_board_id = GetMondayBoard.call(name: board_name).to_i
-            Rails.logger.info("HXCS board id: #{hxcs_board_id}")
+            # Rails.logger.info("HXCS board id: #{hxcs_board_id}")
             @monday = true
           end
         rescue PG::UniqueViolation, ActiveRecord::RecordNotUnique
         rescue => e
-          Rails.logger.error "Line Item processing issue: #{item.inspect}, #{e.message}"
+          Rails.logger.error "Order Replay line item processing issue: #{item.inspect}, #{e.message}"
         end
 
         if @monday
@@ -36,20 +38,19 @@ class OrderController < AuthenticatedController
               total_units: @total_items,
               link: {
                 url: url,
-                text: "Cut Sheet",
-                url_text: "lorem ipsum facto de facto the dog barks"
+                text: "Cut Sheet"
               }
             }
             CreateMondayItem.call(board_id: hxcs_board_id, group_id: "topics", item_name: @order.name, column_values: column_values)
-            Rails.logger.info("Monday Order #{@order.name}, order ID: #{params[:id]} for #{current_shop.shopify_domain}, url_code: #{url_code}")
+            # Rails.logger.info("Monday Order #{@order.name}, order ID: #{params[:id]} for #{current_shop.shopify_domain}, url_code: #{url_code}")
           rescue => e
             Rails.logger.error("Problem trying to send to Monday: #{e.message}, #{e.backtrace}")
           end
         else
-          Rails.logger.info("Not a Monday order: #{params["name"]} for #{current_shop.shopify_domain}, no vendor:equipe tagged products")
+          # Rails.logger.info("Not a Monday order: #{params["name"]} for #{current_shop.shopify_domain}, no vendor:equipe tagged products")
         end
       else
-        Rails.logger.info("Order already exists: #{params[:id]}")
+        Rails.logger.info("Order already exists, no replay for now: #{params[:id]}")
         @order_id = params[:id]
       end
     end
@@ -73,13 +74,11 @@ class OrderController < AuthenticatedController
     document = {
       shop: current_shop.shopify_domain, order_id: order_id
     }.to_json
-    logger.info "Original document is: #{document}"
+    # logger.info "Original document is: #{document}"
     encrypted = cipher.update(document) + cipher.final
-    logger.info "encrypted document: #{encrypted}"
-    final_code = Base64.urlsafe_encode64(encrypted)
-    logger.info "URL Code: #{final_code}"
-    final_code
+    # logger.info "encrypted document: #{encrypted}"
+    Base64.urlsafe_encode64(encrypted)
   rescue => e
-    logger.error "Encryption test problem: #{e.message}"
+    logger.error "Order replay encryption test problem: #{e.message}"
   end
 end

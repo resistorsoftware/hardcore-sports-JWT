@@ -1,4 +1,3 @@
-
 require "openssl"
 require "base64"
 
@@ -12,7 +11,7 @@ module ShopifyApp
       raise "Shop not found" if shop.nil?
 
       order = shop.orders.find_by(order_id: order_id)
-      raise "Order not found" if order.nil?
+      raise "Order not found at #{shopify_domain}: #{order_id}" if order.nil?
 
       cipher = OpenSSL::Cipher.new "aes-256-cbc"
       cipher.decrypt
@@ -23,7 +22,7 @@ module ShopifyApp
       logger.info "decrypted document: #{decrypted}"
       decrypted
     rescue => e
-      puts "Decryption error: #{e.message}"
+      Rails.logger.error "Decryption error: #{e.message}"
     end
 
     def size_bins(options:)
