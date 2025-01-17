@@ -54,8 +54,8 @@ class OrdersPaidJob < ActiveJob::Base
         logger.error "Line Item processing issue: #{item.inspect}, #{e.message}"
       end
       if monday
-        url_code = create_monday_code(order_id: webhook[:id])
-        url = "https://#{shop_url}/orders?id=#{webhook[:id]}&code=#{url_code}"
+        url_code = create_monday_code(order_id: webhook["id"])
+        url = "https://#{shop_url}/orders?id=#{webhook["id"]}&code=#{url_code}"
         # December 2024, add a hoverable item to the design column that would show off all the SKUs in an order
         # the design column is accessed via the "team" ID
         column_values = {
