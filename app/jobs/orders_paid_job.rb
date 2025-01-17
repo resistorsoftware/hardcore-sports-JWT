@@ -67,7 +67,7 @@ class OrdersPaidJob < ActiveJob::Base
             url_text: "cut sheet"
           }
         }
-        CreateMondayItem.call(board_id: hxcs_board_id, group_id: "topics", item_name: @order.name, column_values: column_values)
+        CreateMondayItem.call(board_id: hxcs_board_id, group_id: "topics", item_name: webhook["name"], column_values: column_values)
         # url_code = create_monday_code(order_id: webhook["id"])
         # url = "https://hxc-monday-21440f1fb993.herokuapp.com/orders?id=#{webhook["id"]}&code=#{url_code}"
         # CreateMondayItem.call(board_id: hxcs_board_id, group_id: "topics", item_name: webhook["name"], column_values: {total_units: total_items, link: {url: url, text: "Cut Sheet"}})
