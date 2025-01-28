@@ -60,7 +60,7 @@ class OrdersPaidJob < ActiveJob::Base
         # the design column is accessed via the "team" ID
         column_values = {
           team: @sku_list.join(", "),
-          total_units: @total_items,
+          total_units: total_items,
           link: {
             url: url,
             text: "Cut Sheet",
