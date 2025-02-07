@@ -179,26 +179,36 @@
           <td><%= @products[k]["title"] %></td>
           <td>
             <div class="attribute-container">
-              <div class="attribute-cell">
-                <div class="attribute-subcell">Thread color:</div>
-                <div class="attribute-subcell" style="text-align: center;"><%= @products[k]["thread"] %></div>
-              </div>
-              <div class="attribute-cell">
-                <div class="attribute-subcell">Lining:</div>
-                <div class="attribute-subcell" style="text-align: center;"><%= @products[k]["lining"] %></div>
-              </div>
-              <div class="attribute-cell">
-                <div class="attribute-subcell">Packaging:</div>
-                <div class="attribute-subcell" style="text-align: center;"><%= @products[k]["packaging"] %></div>
-              </div>
-              <div class="attribute-cell">
-                <div class="attribute-subcell">Binding color:</div>
-                <div class="attribute-subcell" style="text-align: center;"><%= @products[k]["binding"] %></div>
-              </div>
-              <div class="attribute-cell">
-                <div class="attribute-subcell">Ear Guard Color:</div>
-                <div class="attribute-subcell" style="text-align: center;"><%= @products[k]["earguard"] %></div>
-              </div>
+              <% if !@products[k]["thread"].nil? %>
+                <div class="attribute-cell">
+                  <div class="attribute-subcell">Thread color:</div>
+                  <div class="attribute-subcell" style="text-align: center;"><%= @products[k]["thread"] %></div>
+                </div>
+              <% end %>
+              <% if !@products[k]["lining"].nil? %>
+                <div class="attribute-cell">
+                  <div class="attribute-subcell">Lining:</div>
+                  <div class="attribute-subcell" style="text-align: center;"><%= @products[k]["lining"] %></div>
+                </div>
+              <% end %>
+              <% if !@products[k]["packaging"].nil? %>
+                <div class="attribute-cell">
+                  <div class="attribute-subcell">Packaging:</div>
+                  <div class="attribute-subcell" style="text-align: center;"><%= @products[k]["packaging"] %></div>
+                </div>
+              <% end %>
+              <% if !@products[k]["binding"].nil? %>
+                <div class="attribute-cell">
+                  <div class="attribute-subcell">Binding color:</div>
+                  <div class="attribute-subcell" style="text-align: center;"><%= @products[k]["binding"] %></div>
+                </div>
+              <% end %>
+              <% if !@products[k]["earguard"].nil? %>
+                <div class="attribute-cell">
+                  <div class="attribute-subcell">Ear Guard Color:</div>
+                  <div class="attribute-subcell" style="text-align: center;"><%= @products[k]["earguard"] %></div>
+                </div>
+              <% end %>
             </div>
           </td>
           <% v.first.product.options.each do |options| %>
