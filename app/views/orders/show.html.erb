@@ -175,8 +175,8 @@
           <td class="image-cell">
             <div class="image-container">
               <img src="<%= v.first.product.images.first.url %>"/>
-              <% if v.first.product.last.url != v.first.product.last.url %>
-                <img src="<%= v.first.product.last.url %>"/>
+              <% if v.first.product.images.first.url != v.first.product.images.last.url %>
+                <img src="<%= v.first.product.images.last.url %>"/>
               <% end %>
             </div>
           </td>
