@@ -47,7 +47,7 @@ class OrdersController < ApplicationController
               @products[item.product.id]["size_bins"]["no size"] = quantity
             else
               @products[item.product.id]["size_bins"][size.to_s] += quantity
-            reduce
+            end
             # @items[item.product.id][size] = quantity
 
             @items[item.product.id] << item
