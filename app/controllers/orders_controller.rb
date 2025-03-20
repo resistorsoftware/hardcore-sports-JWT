@@ -27,7 +27,12 @@ class OrdersController < ApplicationController
           if item&.product&.tags&.include?("vendor:equipe")
             # each variant of a product sold some quantity, so we can nail that down first
             # also, all the sizes are part of the options so we can nail those down too
-            size = item.variant.selected_options.find { |option| option.name.downcase == "size" }.value
+            obj = item.variant.selected_options.find { |option| option.name.downcase == "size" }
+            size = if !obj.nil?
+              obj.value
+            else
+              ""
+            end
             quantity = item.quantity
             if !@products.key?(item.product.id)
               # we have a new product, so we need to add it to the list, and give it some defaults
