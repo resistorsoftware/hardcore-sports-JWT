@@ -50,7 +50,7 @@ class OrdersController < ApplicationController
     end
     render layout: false
   rescue => e
-    logger.error "Problem processing incoming order request: #{e.message}"
+    logger.error "Problem processing incoming order request: #{e.message}\n#{e.backtrace}"
     render "errors/old_order_error", status: :unprocessable_entity
   end
 
