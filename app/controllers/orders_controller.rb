@@ -43,7 +43,11 @@ class OrdersController < ApplicationController
             @products[item.product.id]["binding"] = item.product.binding_color
             @products[item.product.id]["earguard"] = item.product.ear_guard_color
             @products[item.product.id]["title"] = item.product.title
-            @products[item.product.id]["size_bins"][size.to_s] += quantity
+            if size.to_s.empty?
+              @products[item.product.id]["size_bins"]["no size"] = quantity
+            else
+              @products[item.product.id]["size_bins"][size.to_s] += quantity
+            reduce
             # @items[item.product.id][size] = quantity
 
             @items[item.product.id] << item
